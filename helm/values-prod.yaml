@@ -1,0 +1,23 @@
+# configs de PROD
+gateway:
+  replicaCount: 2
+  # duas cópias do kong rodando(margem de segurança, caso uma caia)
+
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+    limits:
+      cpu: 1000m
+      memory: 512Mi
+  # configs de infra do gateway para PROD
+
+
+  proxy:
+    type: LoadBalancer
+  # sobrescrita do valor padrão
+  # pede pra GCP(nuvem) criar um endereço acessível pela internet
+
+  # futuramente adicionar
+  # loadBalancerIP: "ip-fixo"
+  # define um ip fixo que sera exposto, sem isso a GCP define um IP que pode ser alterado se o service for recriado
