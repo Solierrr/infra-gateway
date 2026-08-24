@@ -1,0 +1,28 @@
+# rate-limiting para api-persistence, também usada em api-messenger
+
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: rate-limiting-persistence
+plugin: rate-limiting
+config:
+  limit_by: ip
+  # conta as request por endereço IP de origem
+
+
+  policy: redis
+  # config para guardar as contagens de request no redis 
+
+
+  fault_tolerant: true
+  # se o redis cair, habilita todas as request independente da quantidade de request
+
+
+  minute: 300
+  # maxímo de 300 request por minuto, por IP
+
+  hour: 5000
+ # maxímo de 5000 request por hora, por IP
+
+ 
+  # redis configurado em /overlays
