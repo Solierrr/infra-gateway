@@ -52,6 +52,7 @@ ingressController:
   # KIC responsável por configurar o KONG -> baseado nos arquivos de config do repo
   enabled: true
   # Liga o KIC no Kong.
-  gatewayDiscovery:
-    enabled: true
-    # KIC descobre sozinho onde o kong está rodando
+  # gatewayDiscovery fica desligado (padrão do chart): ele serve pra quando o
+  # KIC precisa descobrir várias instâncias de Kong rodando separadas. Aqui o
+  # Kong e o KIC estão no mesmo release/pod, então o KIC já fala direto com a
+  # Admin API local sem precisar de descoberta nenhuma.
