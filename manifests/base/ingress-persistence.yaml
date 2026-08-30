@@ -1,0 +1,28 @@
+# ingress = regra de roteamento 
+# arquivo responsável pelas regras de roteamento em /api/**
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api-persistence-ingress
+  annotations:
+    konghq.com/strip-path: "false"
+    # define se o kong remove o prefixo /auth antes de mandar a resquest pra frente
+
+    konghq.com/plugins: cors,rate-limiting-persistence
+    # lista de regras aplicadas nesse path
+
+spec:
+  ingressClassName: kong
+  rules:
+    - http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            # Qualquer URL que comece com /api cai aqui
+            backend:
+              service:
+                name: api-persistence
+                # nome do service, dentro do k8s, que a request vai pra frente
+                port:
+                  number: 8080

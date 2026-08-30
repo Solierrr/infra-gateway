@@ -1,0 +1,24 @@
+# rate-limiting para api-auth
+
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: rate-limiting-auth
+plugin: rate-limiting
+config:
+  limit_by: ip
+  # conta as request por endereço IP de origem
+
+  policy: redis
+  # config para guardar as contagens de request no redis 
+
+  fault_tolerant: true
+  # se o redis cair, habilita todas as request independente da quantidade de request
+
+  minute: 60
+  # máximo de 60 requests por minuto, por IP
+  hour: 1000
+  # maxímo de 1000 requests por hora, por IP
+  # limite de request mais bauxo que os outros repos
+  
+  # redis configurado em /overlays
