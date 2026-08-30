@@ -1,59 +1,58 @@
 # lido pelo Helm junto do arquivo de ambiente(dev/prod)
+# chaves aqui ficam na raiz do schema do chart oficial kong/kong - o chart
+# não reconhece "gateway"/"controller" como prefixo, então precisam estar
+# soltas (image, env, proxy, admin, ingressController)
 
-gateway: 
-  # gateway -> parte responsável pelo processamento da request
-  # KIC não precisa de ajuste, usa os padrões do chart(pacote padrão instalado do helm)
+image:
+  tag: "3.9.3"
+  # Versão do kong usada
 
-  image:
-    tag: "3.9.3"
-    # Versão do kong usada
+env:
+  database: "off"
+  # Kong pode guardar suas configs em um bd -> desativado, ou seja,
+  # todas as configs são guardadas na memória e nos arquivos desse repo
 
-  env:
-    database: "off"
-    # Kong pode guardas suas configs em um bd -> desativado, ou seja,
-    # todas as configs são guardadas na memória e nos arquivos desse repo
+  role: traditional
+  # modo de operação do kong -> traditional = processa request e gerencia suas próprias configs
 
-    role: traditional
-    # modo de operação do kong -> traditional = processa request e gerencia suas próprias configs 
+proxy:
+  # proxy é a entrada das request que chegam ao kong
 
-  proxy:
-    # proxy é a entrada das request que chegam ao kong
+  type: ClusterIP
+  # define o tipo de porta -> ClusterIP = ninguem de fora da rede interna consegue bater nela diretamente
+  # em prod usa LoadBalancer, valor padrão é ClusterIP para dev local
+  # LoadBalancer -> Nuvem cria um endereço acessivel pela internet
 
-    type: ClusterIP
-    # define o tipo de porta -> ClusterIP = ninguem de fora da rede interna consegue bater nela diretamente
-    # em prod usa LoadBalancer, valor padrão é ClusterIP para dev local
-    # LoadBalancer -> Nuvem cria um endereço acessivel pela internet
-
-    http:
+  http:
     # Configuração da porta HTTP do Proxy do Kong.
 
-      enabled: true
-      # Liga o listener da porta http
-
-      servicePort: 80
-      # porta exposta que o service é conhecido no cluster
-      # service -> porta que aponta para grupos de pods
-
-      containerPort: 8000
-      # porta que o processo do kong está escutando dentro do pod
-      # k8s recebe na porta 80 -> encaminha para porta 8000 do container
-
-    tls:
-      enabled: false
-      # tls e https desabilitados
-
-  admin:
     enabled: true
-    # porta separada apenas para consulta de config do kong
+    # Liga o listener da porta http
 
-    type: ClusterIP
-    # só acessível dentro do cluster
+    servicePort: 80
+    # porta exposta que o service é conhecido no cluster
+    # service -> porta que aponta para grupos de pods
 
-controller:
+    containerPort: 8000
+    # porta que o processo do kong está escutando dentro do pod
+    # k8s recebe na porta 80 -> encaminha para porta 8000 do container
+
+  tls:
+    enabled: false
+    # tls e https desabilitados
+
+admin:
+  enabled: true
+  # porta separada apenas para consulta de config do kong
+
+  type: ClusterIP
+  # só acessível dentro do cluster
+
+ingressController:
   # KIC responsável por configurar o KONG -> baseado nos arquivos de config do repo
-  ingressController:
-    enabled: true
-    # Liga o KIC no Kong.
-    gatewayDiscovery:
-      enabled: true
-      # KIC descobre sozinno onde o kong está rodando
+  enabled: true
+  # Liga o KIC no Kong.
+  # gatewayDiscovery fica desligado (padrão do chart): ele serve pra quando o
+  # KIC precisa descobrir várias instâncias de Kong rodando separadas. Aqui o
+  # Kong e o KIC estão no mesmo release/pod, então o KIC já fala direto com a
+  # Admin API local sem precisar de descoberta nenhuma.

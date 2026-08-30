@@ -1,18 +1,18 @@
 # configs de desenvolvimento local
+# chaves na raiz do schema do chart (mesmo motivo do values-base.yaml)
 
-gateway:
-  replicaCount: 1
-  # apenas 1 cópia do kong
+replicaCount: 1
+# apenas 1 cópia do kong
 
-  resources:
-  # configs de infra para dev local
+resources:
+# configs de infra para dev local
 
-    requests:
-      cpu: 100m
-      memory: 128Mi
-    limits:
-      cpu: 500m
-      memory: 256Mi
-  
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+
 # para acessar o gateway localmente rode **kubectl -n solier-dev port-forward svc/kong-gateway-proxy 8000:80**
 # cria caminho temporário até o service dentro do cluster *apenas enquanto o comando tiver rodando
