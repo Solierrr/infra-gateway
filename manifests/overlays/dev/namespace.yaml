@@ -1,0 +1,13 @@
+# namespace do k8s local
+
+apiVersion: v1
+# Versão da API nativa do K8s
+
+kind: Namespace
+# Tipo do recurso
+
+metadata:
+  # Informações de identificação deste recurso
+
+  name: solier-dev
+  # Nome exato do recurso

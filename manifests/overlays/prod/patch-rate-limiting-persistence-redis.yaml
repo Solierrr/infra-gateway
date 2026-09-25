@@ -1,0 +1,48 @@
+# Completa o KongPlugin "rate-limiting-auth" com o endereço do Redis de prod(upstash)
+
+apiVersion: configuration.konghq.com/v1
+# Precisa ser a mesma apiVersion do recurso original em base/
+
+kind: KongPlugin
+# Precisa ser o mesmo kind do recurso original em base/
+
+metadata:
+  # Identifica qual recurso já existente este patch vai completar
+
+  name: rate-limiting-persistence
+  # Precisa ter o mesmo nome do KongPlugin em base/
+
+config:
+  # Só os campos listados aqui são adicionados/sobrescritos por cima do que já existe em base/ 
+
+  redis:
+    # conexão com redis para os contadores de rate-limit
+
+    host: SUBSTITUA-ANTES-DE-APLICAR.upstash.io
+    # colocar endreço real do redis aqui
+
+    port: 6379   
+     # porta exata no console Upstash
+
+    database: 0
+    # Fixo em 0
+
+    timeout: 2000
+    # Tempo máximo de espera (ms) por resposta do Redis
+
+    ssl: true
+    # Upstash exige conexão criptografada
+    
+    ssl_verify: true
+    # Confirma que o certificado do servidor Redis é legítimo
+
+    server_name: SUBSTITUA-ANTES-DE-APLICAR.upstash.io
+    # identico ao host acima
+    
+configPatches:
+  # Injeta a senha nesse arquivo a partir de secret no cluster -> "upstash-redis-credentials" precia exisir no cluster
+
+  - path: /redis/password
+    valueFrom:
+      secretKeyRef: { name: upstash-redis-credentials, key: password }
+
