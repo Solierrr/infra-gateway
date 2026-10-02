@@ -1,0 +1,24 @@
+# regra de CORS -> controle de quais sites no navegador tem permissão para fazer requests no gateway
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: cors
+plugin: cors
+config:
+  origins:
+    - http://localhost:3000
+    - http://localhost:5173
+    # Lista de URLs permitidas para fazer request
+    # desenvolvimento local, por isso a permissão tem apenas URLs locais
+    # futuramente adicionar a URL real do site em prod
+
+  methods: [GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS]
+  # tipos de operação HTTP permitidos
+
+  headers:
+    - Authorization
+    - Content-Type
+    # headers disponíveis para envio na request 
+
+  credentials: false
+  # Não permite que o navegador envie cookies/credenciais na request
