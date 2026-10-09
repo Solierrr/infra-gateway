@@ -1,0 +1,111 @@
+_format_version: "3.0"
+
+plugins:
+  - name: correlation-id
+    config:
+      header_name: X-Request-Id
+      generator: uuid
+      echo_downstream: true
+
+services:
+  - name: health
+    url: http://localhost:8001
+    routes:
+      - name: health
+        paths:
+          - /health
+        strip_path: false
+    plugins:
+      - name: request-termination
+        config:
+          status_code: 200
+          content_type: application/json
+          body: '{"status":"UP"}'
+
+  - name: api-auth
+    url: https://api-auth-xw6o.onrender.com
+    routes:
+      - name: api-auth
+        paths:
+          - /api-auth
+        strip_path: true
+
+  - name: api-core
+    url: https://api-core-cqfn.onrender.com
+    routes:
+      - name: api-core
+        paths:
+          - /api-core
+        strip_path: true
+
+  - name: api-messenger
+    url: https://api-messenger-5g2n.onrender.com
+    routes:
+      - name: api-messenger
+        paths:
+          - /api-messenger
+        strip_path: true
+
+  - name: api-recommendation
+    url: https://api-recommendation-qlml.onrender.com
+    routes:
+      - name: api-recommendation
+        paths:
+          - /api-recommendation
+        strip_path: true
+
+  - name: ai-assistant
+    url: https://ai-assistant-5ljd.onrender.com
+    routes:
+      - name: ai-assistant
+        paths:
+          - /ai-assistant
+        strip_path: true
+
+  - name: ai-validation
+    url: https://ai-validation-jjb7.onrender.com
+    routes:
+      - name: ai-validation
+        paths:
+          - /ai-validation
+        strip_path: true
+
+  - name: ai-accessibility
+    url: https://ai-accessibility.onrender.com
+    routes:
+      - name: ai-accessibility
+        paths:
+          - /ai-accessibility
+        strip_path: true
+
+  - name: ai-geographic
+    url: https://ai-geographic.onrender.com
+    routes:
+      - name: ai-geographic
+        paths:
+          - /ai-geographic
+        strip_path: true
+
+  - name: ai-operational
+    url: https://ai-operational.onrender.com
+    routes:
+      - name: ai-operational
+        paths:
+          - /ai-operational
+        strip_path: true
+
+  - name: google-registry
+    url: https://google-registry.onrender.com
+    routes:
+      - name: google-registry
+        paths:
+          - /google-registry
+        strip_path: true
+
+  - name: mcp-database
+    url: https://api-mcp-wey6.onrender.com
+    routes:
+      - name: mcp-database
+        paths:
+          - /mcp-database
+        strip_path: true
