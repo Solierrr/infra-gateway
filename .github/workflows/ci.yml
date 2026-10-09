@@ -22,3 +22,7 @@ jobs:
           helm repo add kong https://charts.konghq.com
           helm template kong kong/ingress --namespace kong -f helm/values-base.yaml -f helm/values-dev.yaml > /dev/null
           helm template kong kong/ingress --namespace kong -f helm/values-base.yaml -f helm/values-prod.yaml > /dev/null
+
+      - name: Validate the QA gateway configuration
+        run: |
+          docker run --rm -v "$PWD/kong:/kong" -e KONG_DATABASE=off kong:3.9.3 kong config parse /kong/kong.qa.yml
