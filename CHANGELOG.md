@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.0](https://github.com/Solierrr/infra-gateway/compare/v0.2.0...v0.3.0) (2026-10-09)
+
+
+### Features
+
+* add the kong gateway for the qa environment ([d1d045c](https://github.com/Solierrr/infra-gateway/commit/d1d045c3a2167dd1fe831362fc9e4212616d76ed))
+
+
+### Bug Fixes
+
+* listen on every port render may route to ([63edf1c](https://github.com/Solierrr/infra-gateway/commit/63edf1cec2aa3388fa78408fda80ade1b9b26cb1))
+* run kong with one worker to fit the free tier memory ([7e94ff7](https://github.com/Solierrr/infra-gateway/commit/7e94ff7f41e54ad65b08ad2533913b0e6632a679))
+
 ## [0.2.0](https://github.com/Solierrr/infra-gateway/compare/v0.1.0...v0.2.0) (2026-09-30)
 
 
