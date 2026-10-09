@@ -7,7 +7,8 @@ ENV KONG_DATABASE=off \
     KONG_PROXY_ERROR_LOG=/dev/stderr
 
 COPY kong/kong.qa.yml /etc/kong/kong.yml
+COPY --chmod=755 docker-cmd.sh /usr/local/bin/docker-cmd.sh
 
-EXPOSE 8000
+EXPOSE 8000 10000
 
-CMD ["sh", "-c", "KONG_PROXY_LISTEN=\"0.0.0.0:${PORT:-8000}\" exec /docker-entrypoint.sh kong docker-start"]
+CMD ["/usr/local/bin/docker-cmd.sh"]
