@@ -1,0 +1,30 @@
+# lista os arquivos da pasta que devem ser aplicados no k8s.
+# usa o kustomize para isso
+# se você criar um arquivo sem adicionar aqui, ele é ignorado
+# kustomization próprio do ambiente de dev -> desenvolvimento local, com k8s e volumes
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+# Versão da API do Kustomize usada por este arquivo
+
+kind: Kustomization
+# define para o kustomization, este arquivo como arquivo de config
+
+namespace: solier-dev
+# define o namespace de tudo que o kustomize gerar a partir dessas configs
+
+resources:
+  # Lista de arquivos/pastas que o Kustomize deve juntar
+
+  - ../../base
+  # Traz as 3 rotas + os 4 plugins comuns a todo ambiente
+
+  - namespace.yaml
+  # cria o namespace
+
+patches:
+
+  - path: patch-rate-limiting-auth-redis.yaml
+  # Completa o KongPlugin rate-limiting-auth com o Redis local
+
+  - path: patch-rate-limiting-persistence-redis.yaml
+  # Completa o KongPlugin rate-limiting-persistence com o Redis local

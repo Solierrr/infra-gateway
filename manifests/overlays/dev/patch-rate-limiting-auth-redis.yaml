@@ -1,0 +1,36 @@
+# redis usado pelo plugin rate-limiting-auth de forma local
+
+apiVersion: configuration.konghq.com/v1
+# Precisa ser a mesma apiVersion do recurso original em base/
+
+kind: KongPlugin
+# Precisa ser o mesmo kind do recurso original em base/
+
+metadata:
+  # identifica qual recurso vai ser completado
+  
+  name: rate-limiting-auth
+  # Precisa ter o mesmo nome do KongPlugin em base/
+
+config:
+  # Só os campos listados aqui são adicionados/sobrescritos por cima do que já existe em base/ 
+
+  redis:
+    # Onde e como conectar no Redis usado pra guardar os contadores de rate-limit
+
+    host: redis.solier-dev.svc.cluster.local
+    # Endereço de um Redis rodando DENTRO do seu cluster local 
+
+    port: 6379
+    # Porta padrão do Redis
+    database: 0
+    # Índice lógico do banco dentro do Redis 
+
+    timeout: 2000
+    # Tempo máximo de espera (ms) por uma resposta do Redis
+
+    ssl: false
+    # Sem criptografia 
+
+    ssl_verify: false
+    # Sem verificação de certificado

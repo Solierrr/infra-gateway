@@ -1,0 +1,12 @@
+# namespace do ambiente de prod no cluster
+
+apiVersion: v1
+# Versão da API nativa do K8s
+
+kind: Namespace
+# Tipo do recurso
+
+metadata:
+  # Informações de identificação deste recurso
+
+  name: solier-prod

@@ -12,12 +12,22 @@ gateway:
       memory: 512Mi
   # configs de infra do gateway para PROD
 
-
   proxy:
     type: LoadBalancer
-  # sobrescrita do valor padrão
-  # pede pra GCP(nuvem) criar um endereço acessível pela internet
+    # sobrescrita do valor padrão (ClusterIP)
+    # pede pro EKS Auto Mode criar uma Network Load Balancer acessível pela internet
 
-  # futuramente adicionar
-  # loadBalancerIP: "ip-fixo"
-  # define um ip fixo que sera exposto, sem isso a GCP define um IP que pode ser alterado se o service for recriado
+    loadBalancerClass: "eks.amazonaws.com/nlb"
+    # cluster em EKS AUTO MODE -> AWS Network Load Balancer(NLB) implementação usada
+
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
+      # nlb direto para o IP dos pods em vez do node
+
+      service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+      # torna a NLB acessível pela internet, em vez de apenas internal
+
+      service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: "preserve_client_ip.enabled=true"
+      # liga a preservação de ip do client -> ip é a referencia do rate-limiting
+
+# sem ip fixo no modo EKS Auto Mode

@@ -1,0 +1,26 @@
+# Índice do ambiente PROD 
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+# Versão da API do Kustomize usada por este arquivo
+
+kind: Kustomization
+# define para o kustomization, este arquivo como arquivo de config
+
+namespace: solier-prod
+# define o namespace de tudo que o kustomize gerar a partir dessas configs
+
+
+resources:
+  # Lista de arquivos/pastas que o Kustomize deve juntar
+
+  - ../../base
+  # Traz as 3 rotas + os 4 plugins comuns a todo ambiente
+
+  - namespace.yaml
+  # Cria o namespace solier-prod
+
+patches:
+  - path: patch-rate-limiting-auth-redis.yaml
+  # Completa o KongPlugin rate-limiting-auth com o Redis (Upstash) de prod
+  - path: patch-rate-limiting-persistence-redis.yaml
+  # Completa o KongPlugin rate-limiting-persistence com o Redis(Upstash) de prod

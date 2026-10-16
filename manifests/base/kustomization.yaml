@@ -1,0 +1,17 @@
+# lista os arquivos da pasta que devem ser aplicados no k8s.
+# usa o kustomize para isso
+# se você criar um arquivo sem adicionar aqui, ele é ignorado
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  # rotas de api
+  - ingress-auth.yaml
+  - ingress-persistence.yaml
+  - ingress-messenger.yaml
+
+  # regras /plugins usados nas rotas
+  - plugin-cors.yaml
+  - plugin-rate-limiting-auth.yaml
+  - plugin-rate-limiting-persistence.yaml
