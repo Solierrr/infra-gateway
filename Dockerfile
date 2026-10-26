@@ -1,4 +1,4 @@
-FROM kong:3.9.3
+FROM kong:3.9.4
 
 ENV KONG_DATABASE=off \
     KONG_DECLARATIVE_CONFIG=/etc/kong/kong.yml \
