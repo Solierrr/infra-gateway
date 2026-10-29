@@ -46,6 +46,14 @@ services:
           - /api-messenger
         strip_path: true
 
+  - name: api-notify
+    url: https://api-notify-i637.onrender.com
+    routes:
+      - name: api-notify
+        paths:
+          - /api-notify
+        strip_path: true
+
   - name: api-recommendation
     url: https://api-recommendation-qlml.onrender.com
     routes:
