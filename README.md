@@ -38,6 +38,27 @@ docker run --rm -v "$PWD/kong:/kong" -e KONG_DATABASE=off kong:3.9.3 kong config
 
 Ao criar um serviço novo no Render, acrescente o par `services` e `routes` correspondente em `kong/kong.qa.yml`.
 
+Além das rotas, o arquivo traz o básico para o navegador e o WebSocket:
+
+- `api-notify` tem rota própria (`/api-notify`). O `api-email` não tem: é um serviço interno, chamado só pelos backends, e não deve sair pelo gateway público.
+- O plugin global `cors` libera as origens do web-app de QA (`web-app-ldi0.onrender.com`, `qa.solarianetwork.site`, `web-sandbox-qa.onrender.com`) e as locais, com os métodos e cabeçalhos comuns, sem credenciais. Origem nova do front precisa entrar na lista `origins`.
+- O `api-messenger` tem `read_timeout` e `write_timeout` de 5 minutos e `connect_timeout` de 10 segundos. O Kong repassa o `Upgrade` do WebSocket em rotas HTTP; o cliente STOMP manda heartbeat a cada 10 segundos, bem abaixo do limite de 60 segundos do padrão.
+
+
 ## Produção
 
 Os valores do Helm estão em `helm/` (`values-base.yaml`, `values-dev.yaml` e `values-prod.yaml`), lidos pelo Terraform do `infra-platform`. O Kong de produção também é DB-less e roteia por host (`<serviço>.solarianetwork.site`), a partir dos `Ingress` do `infra-gitops`.
+
+O WebSocket do `api-messenger` em produção passa pelo mesmo `Ingress` (`/ws`, e `/messaging/ws` por causa do Kong) e os timeouts ficam em anotações `konghq.com/*-timeout` no `Service` do `infra-gitops`. O CORS em produção continua em cada serviço (`CORS_ALLOWED_ORIGINS`), sem plugin no gateway.
+
+## Pendências para revisão do responsável
+
+Fora do básico que faz o gateway funcionar sem intervenção, estes ajustes ficam para revisão:
+
+- Rate limit (`rate-limiting`) por rota e por consumidor, em QA e em produção, principalmente em `/auth` e nos endpoints de IA.
+- WAF ou regras de bloqueio (por exemplo `ip-restriction` e `request-size-limiting`) e limite de tamanho dos uploads.
+- Decidir se o CORS passa a ser feito só no gateway (um `KongClusterPlugin` global em produção) e sai dos serviços; hoje o gateway de QA e os serviços respondem os dois.
+- Autenticação no próprio gateway (por exemplo `jwt` ou `openid-connect`) em vez de cada serviço validar o token.
+- TLS dos `Ingress` da API: só o `web-app` pede certificado ao cert-manager; os hosts `api-*.solarianetwork.site` respondem com o certificado padrão do Kong.
+- Política de logs de acesso, métricas (`prometheus`) e tracing (`opentelemetry`) no Kong.
+
