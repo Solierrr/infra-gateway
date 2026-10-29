@@ -40,6 +40,9 @@ services:
 
   - name: api-messenger
     url: https://api-messenger-5g2n.onrender.com
+    connect_timeout: 10000
+    read_timeout: 300000
+    write_timeout: 300000
     routes:
       - name: api-messenger
         paths:
