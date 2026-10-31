@@ -9,10 +9,10 @@ resources:
 
   requests:
     cpu: 100m
-    memory: 128Mi
+    memory: 256Mi
   limits:
     cpu: 500m
-    memory: 256Mi
+    memory: 512Mi
 
 # para acessar o gateway localmente rode **kubectl -n solier-dev port-forward svc/kong-gateway-proxy 8000:80**
 # cria caminho temporário até o service dentro do cluster *apenas enquanto o comando tiver rodando
